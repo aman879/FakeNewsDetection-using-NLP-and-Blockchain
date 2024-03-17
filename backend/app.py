@@ -6,8 +6,10 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict_route():
     data = request.json
-    predictions = predict(data)
-    return jsonify(predictions.tolist())
+    text_data = data.get('data', '') 
+    prediction, confidence_score = predict(text_data)
+    print(confidence_score.tolist())
+    return jsonify(prediction.tolist(), confidence_score.tolist())
 
 if __name__ == '__main__':
     app.run(debug=True)
