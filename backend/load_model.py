@@ -7,7 +7,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-model = joblib.load('../test_model.pkl')
+model = joblib.load('../model.pkl')
 cv = joblib.load('../countVectorizer_model.pkl')
 
 def preprocess_data(data):
