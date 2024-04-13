@@ -65,15 +65,25 @@ function App() {
     }
   }
 
-  async function getNewsData() {
+  async function getNewsId() {
     try {
       const newsId = await contract.newsId()
-      const realVote = await contract.
       return newsId
     } catch(e) {
       console.log(e.message)
     }
   }
+  
+  async function getNewsData(newsId) {
+    try{
+      const result = await contract.getNewsData(newsId);
+      console.log(result)
+      return result
+    }catch(e) {
+      console.log(e.message)
+    }
+  }
+
 
   async function addVerifier(address) {
     try {
@@ -91,7 +101,7 @@ function App() {
 
   async function vote(newsId, check) {
     try {
-      const tx = await contract.vote()
+      const tx = await contract.vote(newsId, check)
       const receipt = await tx.wait()
 
       if (receipt.status === 0) {
@@ -142,7 +152,9 @@ function App() {
                                             address={selectedAddress} 
                                             owner={owner} 
                                             checkVerifier={checkVerifier}
-                                            vote={vote}/>} />
+                                            vote={vote}
+                                            getNewsData={getNewsData}/>} 
+          />
           <Route path="/profile" element={<Profile
                                             address={selectedAddress}
                                             owner={owner} 
@@ -150,7 +162,8 @@ function App() {
                                             removeVerifiers={removeVerifiers}
                                             checkVerifier={checkVerifier}
                                             addNews={addNews}
-                                            getNewsId={getNewsId}/>
+                                            getNewsId={getNewsId}
+                                            getNewsData={getNewsData}/>
         }/>
         </Routes>
       </BrowserRouter>

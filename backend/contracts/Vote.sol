@@ -142,14 +142,22 @@ contract Vote{
     }
 
     function getNewsData(uint256 _newsId) public view returns(uint64, uint64, bool, bool, bool) {
-        News storage news = newsData[_newsId]
-        returns{
+        News storage news = newsData[_newsId];
+        return(
             news.real,
             news.fake,
             news.ans,
             news.draw,
             news.cal
-        }
+        );
+    }
+
+    function getUserData(address _user) public view returns(uint256, uint256) {
+        Votes storage data = userData[_user];
+        return(
+            data.correctVotes,
+            data.incorrectVotes
+        );
     }
 
 }

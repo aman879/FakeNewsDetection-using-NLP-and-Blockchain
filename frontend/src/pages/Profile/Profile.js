@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-export default function Profile({ address, owner, addVerifier, removeVerifiers, checkVerifier, addNews, getNewsId }) {
+export default function Profile({ address, owner, addVerifier, removeVerifiers, checkVerifier, addNews, getNewsId, getNewsData }) {
     const [isVerifier, setIsVerifier] = useState(false);
     const [prediction, setPrediction] = useState(null);
     const [prbFakeNews, setprbFakeNews] = useState(' ');
     const [prbTrueNews, setPrbTrueNews] = useState(' ');
     const [newsId, setNewsId] = useState(0)
+    const [newsData, setNewsData] = useState({  })
 
     useEffect(() => {
         async function fetchVerifier() {
@@ -34,11 +35,23 @@ export default function Profile({ address, owner, addVerifier, removeVerifiers, 
         }
       }
 
+
       const addingNews = async () => {
         try {
             await addNews();
             const newsId = parseInt(await getNewsId());
             setNewsId(newsId)
+            const result = await getNewsData(newsId)
+            const [real, fake, ans, draw, cal] = result;
+            const cnReal = parseInt(real);
+            const cnFake = parseInt(fake)
+            setNewsData({
+                cnReal,
+                cnFake,
+                ans,
+                draw,
+                cal
+            })
             await predictNews();
         } catch (error) {
             console.error('Error adding news:', error);
@@ -48,13 +61,15 @@ export default function Profile({ address, owner, addVerifier, removeVerifiers, 
     useEffect(() => {
         const postNewsData = async () => {
             try {
+                console.log(newsData)
                 const response = await axios.post('http://localhost:3000/api/news', {
                     newsId,
                     title,
                     news,
                     prediction,
                     prbFakeNews,
-                    prbTrueNews
+                    prbTrueNews,
+                    newsData
                 });
                 console.log(response.data);
                 setTitle('');
