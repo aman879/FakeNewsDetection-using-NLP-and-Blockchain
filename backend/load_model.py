@@ -34,7 +34,6 @@ def predict(data):
     text_vectorized = cv.transform([final_data]).toarray()
     probailities = model.predict_proba(text_vectorized)
     print(probailities)
-    confidence_score = probailities[0][1]
-    print(float(confidence_score))
+    # print(float(confidence_score))
     prediction = model.predict(text_vectorized)[0]
-    return prediction, confidence_score
+    return prediction, probailities

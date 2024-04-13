@@ -1,0 +1,33 @@
+.thecard {
+    position: absolute;
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+}
+
+.thecard:hover .thefront {
+    opacity: 0.5; /* Adjust opacity for the front when hovered */
+    transition: opacity 0.5s ease;
+}
+
+.thecard:hover .theback {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.thefront,
+.theback {
+    position: absolute;
+    width: 100%;
+    backface-visibility: hidden;
+}
+
+.thefront {
+    color: #333;
+    opacity: 1;
+}
+
+.theback {
+    color: #333;
+    opacity: 0;
+}

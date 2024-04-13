@@ -8,7 +8,7 @@ def predict_route():
     data = request.json
     text_data = data.get('data', '') 
     prediction, confidence_score = predict(text_data)
-    print(confidence_score.tolist())
+    # print(confidence_score.tolist())
     return jsonify(prediction.tolist(), confidence_score.tolist())
 
 if __name__ == '__main__':
