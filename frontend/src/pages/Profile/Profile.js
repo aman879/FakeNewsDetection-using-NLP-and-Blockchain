@@ -38,21 +38,24 @@ export default function Profile({ address, owner, addVerifier, removeVerifiers, 
 
       const addingNews = async () => {
         try {
-            await addNews();
-            const newsId = parseInt(await getNewsId());
-            setNewsId(newsId)
-            const result = await getNewsData(newsId)
-            const [real, fake, ans, draw, cal] = result;
-            const cnReal = parseInt(real);
-            const cnFake = parseInt(fake)
-            setNewsData({
-                cnReal,
-                cnFake,
-                ans,
-                draw,
-                cal
-            })
-            await predictNews();
+            const res = await addNews();
+
+            if(res === "success") {        
+                const newsId = parseInt(await getNewsId());
+                setNewsId(newsId)
+                const result = await getNewsData(newsId)
+                const [real, fake, ans, draw, cal] = result;
+                const cnReal = parseInt(real);
+                const cnFake = parseInt(fake)
+                setNewsData({
+                    cnReal,
+                    cnFake,
+                    ans,
+                    draw,
+                    cal
+                })
+                await predictNews();
+            }
         } catch (error) {
             console.error('Error adding news:', error);
         }

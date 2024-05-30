@@ -2,7 +2,7 @@ import SimpleCard from "../../components/Card/Card";
 import datas from "../../contracts/news.json";
 import React, {useState, useEffect} from "react";
 
-export default function News({address, owner, checkVerifier, vote, getNewsData}) {
+export default function News({address, owner, checkVerifier, vote, calculate, getNewsData}) {
     const [isVerifier, setIsVerifier] = useState(false);
     const isOwner = address && owner && address.toLowerCase() === owner.toLowerCase();
 
@@ -35,6 +35,7 @@ export default function News({address, owner, checkVerifier, vote, getNewsData})
                         isVerifier={isVerifier}
                         isOwner={isOwner}
                         vote={vote}
+                        calculate={calculate}
                         getNewsData={getNewsData}
                     />
                 ))}

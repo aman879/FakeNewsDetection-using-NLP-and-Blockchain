@@ -5,18 +5,28 @@ import {
     Typography
 } from "@material-tailwind/react";
 
-export default function SimpleCard({isOwner, isVerifier, newsId, title, description, prediction, perFake, perReal, vote,newsData, getNewsData}) {
+export default function SimpleCard({isOwner, isVerifier, newsId, title, description, prediction, perFake, perReal, vote,calculate, newsData, getNewsData}) {
     const probabReal = perReal*100
     const probabFake = perFake*100
+    const cal = newsData.cal
+    const ans = newsData.ans
+    const draw = newsData.draw
 
     const userVote = async (newsId, check) => {
         console.log(newsId)
         await vote(newsId, check)
-        const result = await updateNewsData(check)
+        const result = await updateNewsData()
         console.log(result)
     }
 
-    const updateNewsData = async (check) => {
+    const calResult = async(newsId) => {
+        await calculate(newsId)
+
+        const result = await updateNewsData()
+        console.log(result)
+    }
+
+    const updateNewsData = async () => {
         try {
             const result = await getNewsData(newsId);
             const [real, fake, ans, draw, cal] = result;
@@ -39,8 +49,7 @@ export default function SimpleCard({isOwner, isVerifier, newsId, title, descript
                 },
                 body: JSON.stringify({
                     newsId,
-                    newsData: newsData,
-                    check
+                    newsData: newsData
                 })
             });
     
@@ -54,7 +63,26 @@ export default function SimpleCard({isOwner, isVerifier, newsId, title, descript
     return (
         <Card className="m-6 p-4 w-96 group bg-gray-500 flex flex-col justify-between">
             <CardBody className="">
-                <span className="text-xs bg-pink-400 p-1 rounded-full mr-2">{prediction}</span>
+                {
+                    cal ?
+                        <>
+                            { draw ?
+                                    <span className="text-xs bg-pink-400 p-1 rounded-full mr-2">DRAW</span>
+                                    :
+                                    <>
+                                    { ans ?
+                                        <span className="text-xs bg-pink-400 p-1 rounded-full mr-2">TRUE</span>
+                                        :
+                                        <span className="text-xs bg-pink-400 p-1 rounded-full mr-2">FALSE</span>
+                                    }</>
+                            }
+                            
+                            <span className="text-xs bg-pink-400 p-1 rounded-full mr-2">Calculated</span>
+                        </>
+                        :
+                        <span className="text-xs bg-pink-400 p-1 rounded-full mr-2">{prediction}</span>
+
+                }
                 <span className="text-xs bg-pink-400 p-1 rounded-full mr-2 font"><span className="font-sans">{probabFake.toPrecision(3)}</span>% fake</span>
                 <span className="text-xs bg-pink-400 p-1 rounded-full mr-2"><span className="font-sans">{probabReal.toPrecision(3)}</span>%  real</span>
                 <Typography variant="h5" color="blue-gray" className="mb-2 mt-2 underline hover:cursor-pointer">
@@ -68,8 +96,11 @@ export default function SimpleCard({isOwner, isVerifier, newsId, title, descript
                 <button onClick={() => userVote(newsId, 0)} className="bg-pink-600 hover:bg-pink-500 rounded-full p-2 mr-2 font-semibold hover:cursor-pointer">Vote Fake</button>
                 <button onClick={() => userVote(newsId, 1)} className="bg-pink-600 hover:bg-pink-500  rounded-full p-2 font-semibold hover:cursor-pointer">Vote Real</button>
                 {
-                    (isOwner || isVerifier) && 
-                        <button className="bg-pink-600 hover:bg-pink-500  rounded-full p-2 ml-2 font-semibold hover:cursor-pointer">Result</button>
+                    (isOwner || isVerifier) &&
+                        cal ?  
+                            <></>
+                            :
+                            <button onClick={() => calResult(newsId)} className="bg-pink-600 hover:bg-pink-500  rounded-full p-2 ml-2 font-semibold hover:cursor-pointer">Result</button>
                 }
                 <div className="mt-1">
                 <span className="text-xs bg-pink-400 p-1 rounded-full ml-2 mr-8 font"><span className="font-sans">{newsData.cnFake}</span> Fake vote</span>

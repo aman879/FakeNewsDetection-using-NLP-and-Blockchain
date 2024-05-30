@@ -79,7 +79,7 @@ app.post('/api/news-update', (req, res) => {
     const contractDir = path.join(__dirname, '..', 'frontend', 'src', 'contracts');
     const newsFilePath = path.join(contractDir, 'news.json');
 
-    const { newsId, newsData, check } = req.body;
+    const { newsId, newsData } = req.body;
 
     fs.readFile(newsFilePath, 'utf-8', (err, data) => {
         if (err) {
@@ -99,8 +99,6 @@ app.post('/api/news-update', (req, res) => {
         if (index !== -1) {
             // Update the newsData of the news at the found index
             news[index].newsData = newsData;
-            // Calculate the new probabilities based on the updated news data
-            calculate(news[index], check);
         } else {
             // If news with the given newsId is not found, push the new newsDatas
             console.error("News ID not found")
@@ -118,21 +116,6 @@ app.post('/api/news-update', (req, res) => {
     });
 })
 
-function calculate(news, check) {
-    if(check) {
-        const prbFalse = news.prbFakeNews * 100; // Corrected variable name
-        const cal = 1/prbFalse;
-        news.prbFakeNews = news.prbFakeNews - cal; // Corrected variable name
-        console.log(news.prbFakeNews)
-        news.prbTrueNews = news.prbTrueNews + cal; // Corrected variable name
-    } else {
-        const prbTrue = news.prbTrueNews * 100; // Corrected variable name
-        const cal = 1/prbTrue;
-        news.prbFakeNews = news.prbFakeNews + cal; // Corrected variable name
-        console.log(news.prbFakeNews)
-        news.prbTrueNews = news.prbTrueNews - cal; // Corrected variable name
-    }
-}
 
 app.listen(3000, () => {
     console.log('App is running on port 3000');

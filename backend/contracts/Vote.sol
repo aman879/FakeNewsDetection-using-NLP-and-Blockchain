@@ -49,7 +49,6 @@ contract Vote{
         bool ans,
         bool draw
     );
-
     constructor() {
         owner = msg.sender;
         verifiers.push(msg.sender);
@@ -61,7 +60,7 @@ contract Vote{
             0,
             0,
             false,
-            false,
+            false, 
             false
         );
         newsId++;
@@ -133,12 +132,13 @@ contract Vote{
         }
     }
 
-    function getOwner() public view returns (address) {
-        return owner;
-    }
 
     function checkVerifier(address _add) public view returns(bool) {
         return isVerifier[_add];
+    }
+    
+    function getOwner() public view returns (address) {
+        return owner;
     }
 
     function getNewsData(uint256 _newsId) public view returns(uint64, uint64, bool, bool, bool) {

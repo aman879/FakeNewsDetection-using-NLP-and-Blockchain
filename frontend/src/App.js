@@ -60,8 +60,10 @@ function App() {
           throw new Error("Transaction Failed!")
           
         }
+        return "success"
     } catch(e) {
       console.log(e.message)
+      return "failed"
     }
   }
 
@@ -113,6 +115,19 @@ function App() {
     }
   }
 
+  async function calculate(newsId) {
+    try {
+      const tx = await contract.calculate(newsId)
+      const receipt = await tx.wait()
+
+      if(receipt.status === 0) {
+        throw new Error("Transaction Failed")
+      }
+    } catch(e) {
+      console.log(e.message)
+    }
+  }
+
   async function checkVerifier(address) {
     if(address !== undefined) {
       try {
@@ -153,6 +168,7 @@ function App() {
                                             owner={owner} 
                                             checkVerifier={checkVerifier}
                                             vote={vote}
+                                            calculate={calculate}
                                             getNewsData={getNewsData}/>} 
           />
           <Route path="/profile" element={<Profile
