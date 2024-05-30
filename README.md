@@ -83,4 +83,4 @@ We welcome all contributors to enhance Sentisonics and make it even more magical
 
 ## 🎗️ License
 
-[MIT](https://github.com/aman879/face-recognition/blob/main/LICENSE)
+[MIT](https://github.com/aman879/FakeNewsDetection-using-NLP-and-Blockchain/blob/main/LICENSE)
